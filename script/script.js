@@ -88,4 +88,17 @@ window.addEventListener('DOMContentLoaded', function () {
   };
   togglePopUp();
 
+  // scrolling
+  const anchors = document.querySelectorAll('a[href]');
+  anchors.forEach((item) => {
+    
+    item.addEventListener('click', (e) => {
+      e.preventDefault();
+      const blockId = item.getAttribute('href').substr(1);
+      document.getElementById(blockId).scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    })
+  });
 });
