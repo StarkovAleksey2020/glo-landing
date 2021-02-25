@@ -51,11 +51,9 @@ window.addEventListener('DOMContentLoaded', function () {
       if (isMenuBtnPressed && !isMenuOpened) {
         menu.classList.toggle('active-menu');
         isMenuOpened = true;
-        console.log('isMenuOpened ____: ', isMenuOpened);
       } else if (isCloseBtnPressed) {
         menu.classList.toggle('active-menu');
         isMenuOpened = false;
-        console.log('isMenuOpened: +++++++ ', isMenuOpened);
       } else if (isMenuItemPressed && isMenuOpened) {
         menu.classList.toggle('active-menu');
         isMenuOpened = false;
