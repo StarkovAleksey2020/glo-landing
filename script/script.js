@@ -42,11 +42,28 @@ window.addEventListener('DOMContentLoaded', function () {
   // menu
   const toggleMenu = () => {
     const menu = document.querySelector('menu');
+    let isMenuOpened = false;
     document.addEventListener('click', (event) => {
       let target = event.target;
-      if (!target.classList.contains('active-menu')) {
-        menu.classList.toggle('active-menu')
-      };
+      const isMenuBtnPressed = target.closest('.menu');
+      const isCloseBtnPressed = target.classList.contains('close-btn');
+      const isMenuItemPressed = target.closest('menu');
+      if (isMenuBtnPressed && !isMenuOpened) {
+        menu.classList.toggle('active-menu');
+        isMenuOpened = true;
+        console.log('isMenuOpened ____: ', isMenuOpened);
+      } else if (isCloseBtnPressed) {
+        menu.classList.toggle('active-menu');
+        isMenuOpened = false;
+        console.log('isMenuOpened: +++++++ ', isMenuOpened);
+      } else if (isMenuItemPressed && isMenuOpened) {
+        menu.classList.toggle('active-menu');
+        isMenuOpened = false;
+      } else if (!isCloseBtnPressed && !isMenuItemPressed && isMenuOpened) {
+        menu.classList.toggle('active-menu');
+        isMenuOpened = false;        
+      }
+      
     });
   };
   toggleMenu();
