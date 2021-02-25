@@ -50,16 +50,22 @@ window.addEventListener('DOMContentLoaded', function () {
       menu.classList.toggle('active-menu');
     }
     btnMenu.addEventListener('click', handlerMenu);
-    closeBtn.addEventListener('click', handlerMenu);
-    menuItems.forEach((elem) => elem.addEventListener('click', handlerMenu));
+
+    menu.addEventListener('click', (event) => {
+      let target = event.target;
+      if (target.classList.contains('close-btn') || target.tagName === 'A') {
+        menu.classList.toggle('active-menu')
+      };
+    });
+
   };
   toggleMenu();
 
   //popup
   const togglePopUp = () => {
     const popup = document.querySelector('.popup'),
-      popupBtn = document.querySelectorAll('.popup-btn'),
-      popUpClose = document.querySelector('.popup-close');
+      popupBtn = document.querySelectorAll('.popup-btn');
+
     let interval,
       count = 0,
       screenWidth = screen.width;
@@ -75,8 +81,20 @@ window.addEventListener('DOMContentLoaded', function () {
         }
       })
     });
-    popUpClose.addEventListener('click', () => { popup.style.display = 'none' });
     
+    popup.addEventListener('click', (event) => {
+      let target = event.target;
+      if (target.classList.contains('popup-close')) {
+        popup.style.display = 'none';
+      } else {
+        target = target.closest('.popup-content');
+  
+        if (!target) {
+          popup.style.display = 'none';
+        }
+      }
+    });
+
     //animation
     let elementAnimate = function() {
       interval = requestAnimationFrame(elementAnimate);
@@ -95,10 +113,43 @@ window.addEventListener('DOMContentLoaded', function () {
     item.addEventListener('click', (e) => {
       e.preventDefault();
       const blockId = item.getAttribute('href').substr(1);
-      document.getElementById(blockId).scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
+      if (blockId !== 'close') {
+        document.getElementById(blockId).scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
     })
   });
+
+  // tabs
+  const tabs = () => {
+    const tabHeader = document.querySelector('.service-header'),
+      tab = tabHeader.querySelectorAll('.service-header-tab'),
+      tabContent = document.querySelectorAll('.service-tab');
+    const toggleTabContent = (index) => {
+      for (let i = 0; i < tabContent.length; i++) {
+        const element = tabContent[i];
+        if (index === i) {
+          tabContent[i].classList.add('active');
+          tabContent[i].classList.remove('d-none');
+        } else {
+          tabContent[i].classList.remove('active');
+          tabContent[i].classList.add('d-none');
+        }
+      }
+    };
+    tabHeader.addEventListener('click', (event) => {
+      let target = event.target;
+      target = target.closest('.service-header-tab');
+      if (target) {
+        tab.forEach((item, i) => {
+          if (item === target) {
+            toggleTabContent(i);
+          }
+        })
+      }
+    });
+  };
+  tabs();
 });
