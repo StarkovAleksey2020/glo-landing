@@ -260,4 +260,101 @@ window.addEventListener('DOMContentLoaded', function () {
     startSlide(2000);
   };
   slider();
+
+  // mouse over/out change image
+  const changeImage = () => {
+    const commandImages = document.querySelectorAll('.command__photo');
+    commandImages.forEach(item => {item.addEventListener('mouseover', (e) => { imageHandler(e) }) })
+    commandImages.forEach(item => {item.addEventListener('mouseout', (e) => { imageHandler(e) }) })
+    
+    const imageHandler = (e) => {
+      const dataImg = e.target.src;
+      e.target.src = e.target.dataset.img;
+      e.target.dataset.img = dataImg;
+    }
+  };
+
+  changeImage();
+
+  // numbers allow only (in calculator fields)
+  const validateCalculatorFields = () => {
+    const calculatorItems = document.querySelectorAll('.calc-item');
+    calculatorItems.forEach(item => {
+      item.addEventListener('input', (e) => {
+        let calcInput = e.target.value;
+        e.target.value = calcInput.replace(/\D/g, '');
+      });
+    });
+  };
+
+  validateCalculatorFields();
+
+  // cyrillic allow only (in name&message fields)
+  const validateFormFields = () => {
+    const customerName = document.getElementById('form2-name');
+    const customerMessage = document.getElementById('form2-message');
+    customerName.addEventListener('input', (e) => {
+      let nameInput = e.target.value;
+      e.target.value = nameInput.replace(/[^А-Яа-яЁё -]/g, '');
+    });
+    customerMessage.addEventListener('input', (e) => {
+      let messageInput = e.target.value;
+      e.target.value = messageInput.replace(/[^А-Яа-яЁё -]/g, '');
+    });
+  };
+
+  validateFormFields();
+
+  // email field validation
+  const validateEmail = () => {
+    const email = document.getElementById('form2-email');
+    email.addEventListener('input', (e) => {
+      let emailInput = e.target.value;
+      e.target.value = emailInput.replace(/[^A-Za-z@\-_.!~*']/g, '');
+    });
+  };
+
+  validateEmail();
+
+  // phone field validation
+  const validatePhone = () => {
+    const phone = document.getElementById('form2-phone');
+    phone.addEventListener('input', (e) => {
+      let phoneInput = e.target.value;
+      e.target.value = phoneInput.replace(/[^0-9\-()]/g, '');
+    });
+  };
+
+  validatePhone();
+
+  // point 6 rules
+  const formHandler = (element) => {
+    let elementValue = element.value;
+    elementValue = elementValue.replace(/[ ]+/g, ' ');
+    elementValue = elementValue.replace(/[-]+/g, '-');
+    elementValue = elementValue.replace(/^[ ]+/g, '');
+    elementValue = elementValue.replace(/^[-]+/g, '');
+    elementValue = elementValue.replace(/[ ]+$/g, '');
+    elementValue = elementValue.replace(/[-]+$/g, '');
+    if (element.id === 'form2-name') {
+      elementValue = elementValue.substring(0, 1).toUpperCase() + elementValue.substring(1).toLowerCase();
+    }
+    element.value = elementValue;
+  };
+
+  // blur handling
+  const blurHandler = () => {
+    const form = document.getElementById("form2");
+    const formInputs = form.querySelectorAll('input');
+
+    form.addEventListener('blur', (e) => {
+      validateFormFields();
+      validateEmail();
+      validatePhone();
+      formInputs.forEach(item => formHandler(item));
+    }, true);
+  };
+
+  blurHandler();
+
 });
