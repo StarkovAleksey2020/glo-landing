@@ -390,7 +390,18 @@ window.addEventListener('DOMContentLoaded', function () {
       }
       
       totalValue.textContent = total;
+
+      const showTotal = () => {
+        for (let index = 0; index <= total; index++) {
+          (function(ind) {
+            setTimeout(function(){totalValue.textContent = index;}, (ind+0.1) );
+          })(index);
+        }
+      };
+
+      setTimeout(showTotal, 1000);
     };
+
 
     calcBlock.addEventListener('change', (event) => {
       const target = event.target;
