@@ -413,4 +413,5 @@ window.addEventListener('DOMContentLoaded', function () {
   };
 
   calc(100);
+
 });
