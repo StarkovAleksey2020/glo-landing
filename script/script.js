@@ -424,7 +424,7 @@ window.addEventListener('DOMContentLoaded', function () {
   // send-ajax-form
 
   const sendForm = (formName) => {
-    const errorMessage = 'Что-то пощло не так ...',
+    const errorMessage = 'Что-то пошло не так ...',
       loadMessage = 'Загрузка ...',
       successMessage = 'Спасибо! Мы скоро с вами свяжемся!';
     
@@ -438,16 +438,19 @@ window.addEventListener('DOMContentLoaded', function () {
       event.preventDefault();
       form.appendChild(statusMessage);
 
-      statusMessage.textContent = loadMessage;
+      //statusMessage.textContent = loadMessage;
+      statusMessage.classList.add('loader');
       const formData = new FormData(form);
       let body = {};
       for (let value of formData.entries()) {
         body[value[0]] = value[1];
       }
       postData(body, () => {
+        statusMessage.classList.remove('loader');
         statusMessage.textContent = successMessage
         clearForm(formName);
       }, (error) => {
+        statusMessage.classList.remove('loader');
         statusMessage.textContent = errorMessage;
         console.error(error)
       });
