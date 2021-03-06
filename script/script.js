@@ -290,20 +290,24 @@ window.addEventListener('DOMContentLoaded', function () {
   validateCalculatorFields();
 
   // cyrillic allow only (in name&message fields)
-  const validateFormFields = () => {
-    const customerName = document.getElementById('form2-name');
+  const validateFormFields = (nameFieldId) => {
+    const customerName = document.getElementById(nameFieldId);
     const customerMessage = document.getElementById('form2-message');
     customerName.addEventListener('input', (e) => {
       let nameInput = e.target.value;
-      e.target.value = nameInput.replace(/[^А-Яа-яЁё -]/g, '');
+      //e.target.value = nameInput.replace(/[^А-Яа-яЁё -]/g, '');
+      e.target.value = nameInput.replace(/[^А-Яа-яЁё ]/g, '');
     });
     customerMessage.addEventListener('input', (e) => {
       let messageInput = e.target.value;
-      e.target.value = messageInput.replace(/[^А-Яа-яЁё -]/g, '');
+      //e.target.value = messageInput.replace(/[^А-Яа-яЁё -]/g, '');
+      e.target.value = messageInput.replace(/[^А-Яа-яЁё 0-9.,\/#!$%\^&\*;:{}=\-_`~()]/g, '');
     });
   };
 
-  validateFormFields();
+  validateFormFields('form1-name');
+  validateFormFields('form2-name');
+  validateFormFields('form3-name');
 
   // email field validation
   const validateEmail = () => {
@@ -317,15 +321,18 @@ window.addEventListener('DOMContentLoaded', function () {
   validateEmail();
 
   // phone field validation
-  const validatePhone = () => {
-    const phone = document.getElementById('form2-phone');
+  const validatePhone = (phoneFieldId) => {
+    const phone = document.getElementById(phoneFieldId);
     phone.addEventListener('input', (e) => {
       let phoneInput = e.target.value;
-      e.target.value = phoneInput.replace(/[^0-9\-()]/g, '');
+      //e.target.value = phoneInput.replace(/[^0-9\-()]/g, '');
+      e.target.value = phoneInput.replace(/[^0-9+]/g, '');
     });
   };
 
-  validatePhone();
+  validatePhone('form1-phone');
+  validatePhone('form2-phone');
+  validatePhone('form3-phone');
 
   // point 6 rules
   const formHandler = (element) => {
@@ -344,13 +351,13 @@ window.addEventListener('DOMContentLoaded', function () {
 
   // blur handling
   const blurHandler = () => {
-    const form = document.getElementById("form2");
+    const form = document.getElementById('form2');
     const formInputs = form.querySelectorAll('input');
 
     form.addEventListener('blur', (e) => {
-      validateFormFields();
+      validateFormFields('form2-name');
       validateEmail();
-      validatePhone();
+      validatePhone('form2-phone');
       formInputs.forEach(item => formHandler(item));
     }, true);
   };
@@ -413,5 +420,68 @@ window.addEventListener('DOMContentLoaded', function () {
   };
 
   calc(100);
+
+  // send-ajax-form
+
+  const sendForm = (formName) => {
+    const errorMessage = 'Что-то пощло не так ...',
+      loadMessage = 'Загрузка ...',
+      successMessage = 'Спасибо! Мы скоро с вами свяжемся!';
+    
+    const form = document.getElementById(formName);
+
+    const statusMessage = document.createElement('div');
+    statusMessage.style.cssText = 'font-size: 2rem';
+    statusMessage.style.color = '#FFFFFF';
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      form.appendChild(statusMessage);
+
+      statusMessage.textContent = loadMessage;
+      const formData = new FormData(form);
+      let body = {};
+      for (let value of formData.entries()) {
+        body[value[0]] = value[1];
+      }
+      postData(body, () => {
+        statusMessage.textContent = successMessage
+        clearForm(formName);
+      }, (error) => {
+        statusMessage.textContent = errorMessage;
+        console.error(error)
+      });
+    });
+
+    const clearForm = (formName) => {
+      const inputElements = document.getElementById(formName).getElementsByTagName('input');
+      for (let item of inputElements) {
+        item.value = '';
+      }
+    };
+
+    const postData = (body, outputData, errorData) => {
+      const request = new XMLHttpRequest();
+      request.addEventListener('readystatechange', () => {
+
+        if (request.readyState !== 4) {
+          return;
+        }
+
+        if (request.status === 200) {
+          outputData();
+        } else {
+          errorData(request.status);
+        }
+      });
+      request.open('POST', './server.php');
+      request.setRequestHeader('Content-Type', 'application/json');
+      request.send(JSON.stringify(body));
+    };
+  };
+
+  sendForm('form1');
+  sendForm('form2');
+  sendForm('form3');
 
 });
