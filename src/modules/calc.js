@@ -31,15 +31,17 @@ const calc = (price = 100) => {
     
     totalValue.textContent = total;
 
-    const showTotal = () => {
-      for (let index = 0; index <= total; index++) {
-        (function(ind) {
-          setTimeout(function(){totalValue.textContent = index;}, (ind+0.1) );
-        })(index);
+    const showTotal = (value) => {
+      if (value < 100000) {
+        for (let index = 0; index <= total; index++) {
+          setTimeout(() => totalValue.textContent = index, 50);
+        }
+      } else {
+        totalValue.textContent = value;
       }
     };
 
-    setTimeout(showTotal, 1000);
+    setTimeout(showTotal(total), 500);
   };
 
 

@@ -6,9 +6,11 @@ const tabs = () => {
     for (let i = 0; i < tabContent.length; i++) {
       const element = tabContent[i];
       if (index === i) {
+        tab[i].classList.add('active');
         tabContent[i].classList.add('active');
         tabContent[i].classList.remove('d-none');
       } else {
+        tab[i].classList.remove('active');
         tabContent[i].classList.remove('active');
         tabContent[i].classList.add('d-none');
       }
