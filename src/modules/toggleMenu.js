@@ -5,21 +5,20 @@ const toggleMenu = () => {
     let target = event.target;
     const isMenuBtnPressed = target.closest('.menu');
     const isCloseBtnPressed = target.classList.contains('close-btn');
-    const isMenuItemPressed = target.closest('menu');
+    
     if (isMenuBtnPressed && !isMenuOpened) {
       menu.classList.toggle('active-menu');
       isMenuOpened = true;
     } else if (isCloseBtnPressed) {
       menu.classList.toggle('active-menu');
       isMenuOpened = false;
-    } else if (isMenuItemPressed && isMenuOpened) {
+    } else if (target.tagName.toLowerCase() === 'a') {
       menu.classList.toggle('active-menu');
       isMenuOpened = false;
-    } else if (!isCloseBtnPressed && !isMenuItemPressed && isMenuOpened) {
+    } else if (target.closest('menu') === null) {
       menu.classList.toggle('active-menu');
       isMenuOpened = false;
     }
-    
   });
 };
 
