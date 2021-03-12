@@ -1,6 +1,8 @@
 const sendForm = (formName) => {
   const errorMessage = 'Что-то пошло не так ...',
     loadMessage = 'Загрузка ...',
+    fillEmail = 'Заполните email!',
+    nameFieldLength = 'Длина поля имени - минимум 2 знака',
     successMessage = 'Спасибо! Мы скоро с вами свяжемся!';
   
   const form = document.getElementById(formName);
@@ -12,6 +14,27 @@ const sendForm = (formName) => {
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     form.appendChild(statusMessage);
+    const inputs = Array.from(form.querySelectorAll('input'));
+
+    for (let index = 0; index < inputs.length; index++) {
+      const emailName = inputs[index].getAttribute('name');
+      if (emailName === 'user_email') {
+        if (inputs[index].value.trim().length === 0) {
+          statusMessage.textContent = fillEmail;
+          throw new Error('empty email field');
+        }
+        inputs[index].addEventListener('input', (e) => {
+          let emailInput = inputs[index].value;
+          inputs[index].value = emailInput.replace(/[^A-Za-z@\-_.!~*']/g, '');
+        });
+      } else if (emailName === 'user_name') {
+        if (inputs[index].value.trim().length < 2) {
+          statusMessage.textContent = nameFieldLength;
+          throw new Error('name field too short (must be minimum 2 chars)');
+        }
+      }
+    }
+    
 
     //statusMessage.textContent = loadMessage;
     statusMessage.classList.add('loader');
@@ -22,12 +45,12 @@ const sendForm = (formName) => {
     }
     postData(body, () => {
       statusMessage.classList.remove('loader');
-      statusMessage.textContent = successMessage
+      statusMessage.textContent = successMessage;
       clearForm(formName);
     }, (error) => {
       statusMessage.classList.remove('loader');
       statusMessage.textContent = errorMessage;
-      console.error(error)
+      console.error(error);
     });
   });
 

@@ -4,8 +4,8 @@ const togglePopUp = () => {
 
   let interval,
     count = 0,
-    screenWidth = screen.width;
-  
+    screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+
   popupBtn.forEach((elem) => {
     elem.addEventListener('click', () => {
       popup.style.display = 'block';
@@ -14,8 +14,10 @@ const togglePopUp = () => {
         interval = requestAnimationFrame(elementAnimate);
         interval = 0;
         count = 0;
+      } else {
+        popup.style.opacity = 1;
       }
-    })
+    });
   });
   
   popup.addEventListener('click', (event) => {
@@ -40,5 +42,6 @@ const togglePopUp = () => {
     }
   }
 };
+
 
 export default togglePopUp;
