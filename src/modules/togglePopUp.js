@@ -15,6 +15,7 @@ const togglePopUp = () => {
         interval = 0;
         count = 0;
       } else {
+        console.log();
         popup.style.opacity = 1;
       }
     });

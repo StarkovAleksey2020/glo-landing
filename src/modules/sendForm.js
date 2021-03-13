@@ -37,6 +37,7 @@ const sendForm = (formName) => {
     
 
     //statusMessage.textContent = loadMessage;
+    statusMessage.textContent = '';
     statusMessage.classList.add('loader');
     const formData = new FormData(form);
     let body = {};
