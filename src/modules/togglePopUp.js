@@ -15,7 +15,8 @@ const togglePopUp = () => {
         interval = 0;
         count = 0;
       } else {
-        console.log();
+        interval = 0;
+        count = 0;
         popup.style.opacity = 1;
       }
     });
@@ -41,7 +42,7 @@ const togglePopUp = () => {
     if ((count / 100) < 1) {
       popup.style.opacity = (count / 100);
     }
-  }
+  };
 };
 
 
